@@ -2,7 +2,7 @@ module Main (main) where
 
     import System.IO (readFile, IOMode (ReadMode) )
 
-    import Board (Matrix (Matrix), boardFromText)
+    import Suguru.Board (boardFromText)
 
     main = do
         content <- readFile "../Examples/1.txt"

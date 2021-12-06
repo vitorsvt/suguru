@@ -1,12 +1,6 @@
-module Board where
+module Suguru.Board where
 
-    -- Matrizes são uma lista de listas
-    newtype Matrix t = Matrix [[t]]
-
-    -- Implementa o tipo Show
-    instance Show t => Show (Matrix t) where
-        show (Matrix (a:xs)) = show a ++ "\n" ++ show (Matrix xs)
-        show (Matrix []) = ""
+    import Suguru.Utils (Matrix (Matrix))
 
     -- Uma célula, com o identificador do bloco e o seu valor
     -- "-1" significa valor desconhecido

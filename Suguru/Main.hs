@@ -1,10 +1,13 @@
 module Main (main) where
 
-    import System.IO (readFile, IOMode (ReadMode) )
-
-    import Suguru.Board (boardFromText)
-
+    import System.IO (readFile)
+    import Suguru.Board (boardFromText, getBlock)
+    import Suguru.Utils (printMatrix, getNeighbors)
+    import Suguru.Solver (getCellOptions, getBlockOptions)
+    
     main = do
         content <- readFile "Examples/1.txt"
         let rows = lines content
-        print (boardFromText rows)
+        let board = boardFromText rows
+        printMatrix board
+        print (getCellOptions board (4, 5))

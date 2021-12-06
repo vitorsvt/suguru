@@ -1,6 +1,6 @@
 module Suguru.Board where
 
-    import Suguru.Utils (Matrix (Matrix))
+    import Suguru.Utils (Matrix, Position)
 
     -- Uma célula, com o identificador do bloco e o seu valor
     -- "-1" significa valor desconhecido
@@ -26,4 +26,11 @@ module Suguru.Board where
     -- Gera o tabuleiro a partir de uma lista de strings
     boardFromText :: [String] -> Board
     boardFromText [] = error "Não foi possível ler o tabuleiro"
-    boardFromText s = Matrix (map (\ x -> [parseCell s | s <- words x]) s)
+    boardFromText s = map (\x -> [parseCell s | s <- words x]) s
+
+    isBlock :: String -> Cell -> Bool
+    isBlock query (Cell block _) = block == query
+
+    -- Retorna o bloco (grupo de células) com base em um identificador
+    getBlock :: Board -> String -> [Cell]
+    getBlock m block = filter (isBlock block) (concat m)

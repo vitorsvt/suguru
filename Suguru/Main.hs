@@ -5,6 +5,6 @@ module Main (main) where
     import Suguru.Board (boardFromText)
 
     main = do
-        content <- readFile "../Examples/1.txt"
+        content <- readFile "Examples/1.txt"
         let rows = lines content
         print (boardFromText rows)

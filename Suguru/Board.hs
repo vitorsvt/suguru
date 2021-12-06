@@ -21,9 +21,9 @@ module Suguru.Board where
                                  | otherwise = Cell block (-1)
 
     -- Implementação do tabuleiro, como uma matriz de células
-    newtype Board = Board (Matrix Cell) deriving Show
+    type Board = Matrix Cell
 
     -- Gera o tabuleiro a partir de uma lista de strings
     boardFromText :: [String] -> Board
     boardFromText [] = error "Não foi possível ler o tabuleiro"
-    boardFromText s = Board (Matrix (map (\ x -> [parseCell s | s <- words x]) s))
+    boardFromText s = Matrix (map (\ x -> [parseCell s | s <- words x]) s)

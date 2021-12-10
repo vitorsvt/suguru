@@ -1,13 +1,13 @@
 module Main (main) where
 
 import Data.ByteString (getLine)
-import Suguru.Board (boardFromText, getBlock)
-import Suguru.Solver (getBlockOptions, getCellOptions, getValueFromPos, getBoardOptions)
-import Suguru.Utils (getNeighbors, printMatrix)
+import Suguru.Board (boardFromText, getBlock, cellFromTuple)
+import Suguru.Solver (getBlockOptions, getBlockFromPos, getCellOptions, getValueFromPos, getBoardOptions)
+import Suguru.Utils (getNeighbors, printMatrix, setAt)
 import System.IO (readFile)
 
 main = do
-  content <- readFile "Examples/1.txt"
+  content <- readFile "Examples/2.txt"
   let rows = lines content
   let board = boardFromText rows
 
@@ -23,7 +23,8 @@ main = do
   printMatrix board
   
   let n = getBoardOptions board (1,1)
-
-  print (getValueFromPos n (i, j))
+  
+  print( (getBlockFromPos n (i, j)))
+  print ( (getValueFromPos n (i, j)))
   print (getCellOptions board (i, j))
   

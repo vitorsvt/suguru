@@ -30,3 +30,11 @@ getNeighborPositions (x, y) = [(x + i, y + j) | i <- [-1 .. 1], j <- [-1 .. 1], 
 
 getNeighbors :: Matrix t -> Position -> [t]
 getNeighbors m pos = catMaybes ([getAt m p | p <- getNeighborPositions pos])
+
+-- inclui item na matriz
+setAt :: Matrix t -> Position -> t -> Matrix t
+setAt matrix (i, j) value =
+  start ++ (x ++ value : ys) : end
+  where
+    (start, row:end) = splitAt (i - 1) matrix
+    (x, _:ys) = splitAt (j - 1) row

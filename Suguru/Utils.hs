@@ -4,7 +4,7 @@ import Data.Maybe (catMaybes)
 
 type Position = (Int, Int)
 
--- Matrizes são uma lista de listas
+-- Matriz é uma lista de listas
 type Matrix t = [[t]]
 
 -- Não é possível implementar Show diretamente por usarmos "type"

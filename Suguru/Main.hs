@@ -2,7 +2,7 @@ module Main (main) where
 
 import Data.ByteString (getLine)
 import Suguru.Board (boardFromText, getBlock)
-import Suguru.Solver (getBlockOptions, getCellOptions)
+import Suguru.Solver (getBlockOptions, getCellOptions, getValueFromPos, getBoardOptions)
 import Suguru.Utils (getNeighbors, printMatrix)
 import System.IO (readFile)
 
@@ -21,4 +21,9 @@ main = do
   let j = (read js :: Int)
 
   printMatrix board
+  
+  let n = getBoardOptions board (1,1)
+
+  print (getValueFromPos n (i, j))
   print (getCellOptions board (i, j))
+  

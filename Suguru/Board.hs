@@ -4,7 +4,7 @@ import Suguru.Utils (Matrix, Position)
 
 -- Uma célula, com o identificador do bloco e o seu valor
 -- "-1" significa valor desconhecido
-data Cell = Cell String Int
+data Cell = Cell String Int deriving (Eq)
 
 -- Implementa o tipo Show
 instance Show Cell where
@@ -36,3 +36,4 @@ isBlock query (Cell block _) = block == query
 -- Retorna o bloco (grupo de células) com base em um identificador
 getBlock :: Board -> String -> [Cell]
 getBlock m block = filter (isBlock block) (concat m)
+

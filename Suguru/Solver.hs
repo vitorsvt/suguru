@@ -49,7 +49,7 @@ writeBoard v (x,y) board = newboard
     
   -- função lambda com problemas, apenas altera valores das celulas do bloco A
   -- foi adicionada uma derivacao de Eq em Board.hs na declaracao de Cell
-    newboard = map (\row -> map (\cell -> (if cell == c then writeCell c v else cell)) row) board
+    newboard = map (\row -> [ writeCell c v | c <- row]) board
     Just c = getAt board (x,y)
 
 -- escreve na celula

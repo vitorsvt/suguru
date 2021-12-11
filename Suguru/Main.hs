@@ -7,7 +7,7 @@ import Suguru.Utils (getNeighbors, printMatrix, setAt)
 import System.IO (readFile)
 
 main = do
-  content <- readFile "Examples/1.txt"
+  content <- readFile "Examples/3.txt"
   let rows = lines content
   let board = boardFromText rows
 
@@ -25,4 +25,3 @@ main = do
   case solve board of
     Nothing -> print "Nothing"
     Just solution -> printMatrix solution
-  

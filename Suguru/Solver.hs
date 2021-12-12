@@ -39,7 +39,7 @@ getBlockOptions board block =
   getBlock board block >>= (\cells -> Just(filter (`notElem` mapMaybe getCellValue cells) [1..(length cells)]))
 
 isSolved :: Board -> Bool
-isSolved board = null [True | i <- [1..(length board)], j <- [1..(length board)], isNothing (getValueFromPos board (i, j))]
+isSolved board = not (any (\(Cell _ value) -> isNothing value) (concat board))
 
 getNextCell :: Board -> Maybe Position
 getNextCell board = do
@@ -57,7 +57,7 @@ getNextCell' board (Just x) (Just y) = do
 
 -- pretende-se implantar o backtracking na funcao abaixo
 solve :: Board -> Maybe Board
-solve board 
+solve board
   | isSolved board = Just board
   | otherwise = do
     pos <- getNextCell board

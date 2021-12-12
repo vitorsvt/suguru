@@ -1,13 +1,21 @@
 module Suguru.Utils where
 
-import Data.Maybe (catMaybes)
+import Data.Maybe (mapMaybe)
 
-type Position = (Int, Int)
+-- ========================================================================== --
+--                                    Tipos                                   --
+-- ========================================================================== --
 
--- Matriz é uma lista de listas
+-- | Matriz do tabuleiro, representada por uma lista de listas
 type Matrix t = [[t]]
 
--- Não é possível implementar Show diretamente por usarmos "type"
+-- | Representa uma coordenada 2D na matriz
+type Position = (Int, Int)
+
+-- ========================================================================== --
+--                                   Funções                                  --
+-- ========================================================================== --
+
 printMatrix :: Show t => Matrix t -> IO ()
 printMatrix m = putStrLn (matrixAsString m)
 
@@ -16,25 +24,29 @@ matrixAsString (a : xs) = show a ++ "\n" ++ matrixAsString xs
 matrixAsString [] = ""
 
 validPosition :: Matrix t -> Position -> Bool
-validPosition matrix (x, y) = x >= 0 && y >= 0 && x < n && y < n
-  where
-    n = length matrix
+validPosition matrix (x, y) =
+  let n = length matrix in
+  x >= 0 && y >= 0 && x < n && y < n
 
 getAt :: Matrix t -> Position -> Maybe t
-getAt m (x, y)
-  | validPosition m (x -1, y -1) = Just (m !! (x -1) !! (y -1))
+getAt matrix (i, j)
+  | validPosition matrix (i-1, j-1) = Just (matrix !! (i-1) !! (j-1))
   | otherwise = Nothing
 
+setAt :: Matrix t -> Position -> t -> Maybe (Matrix t)
+setAt matrix (i, j) value
+  | validPosition matrix (i-1, j-1) = Just (start++(x++value:ys):end)
+  | otherwise = Nothing
+  where
+    (start, row:end) = splitAt (i-1) matrix
+    (x, _:ys) = splitAt (j-1) row
+
 getNeighborPositions :: Position -> [Position]
-getNeighborPositions (x, y) = [(x + i, y + j) | i <- [-1 .. 1], j <- [-1 .. 1], (i, j) /= (0, 0)]
+getNeighborPositions (i, j) =
+  [(i+a, j+b)
+  | a <- [-1..1]
+  , b <- [-1..1]
+  , (a, b) /= (0, 0)]
 
 getNeighbors :: Matrix t -> Position -> [t]
-getNeighbors m pos = catMaybes ([getAt m p | p <- getNeighborPositions pos])
-
--- inclui item na matriz
-setAt :: Matrix t -> Position -> t -> Matrix t
-setAt matrix (i, j) value =
-  start ++ (x ++ value : ys) : end
-  where
-    (start, row:end) = splitAt (i - 1) matrix
-    (x, _:ys) = splitAt (j - 1) row
+getNeighbors matrix pos = mapMaybe (getAt matrix) (getNeighborPositions pos)

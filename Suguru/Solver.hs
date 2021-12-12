@@ -11,9 +11,17 @@ import Suguru.Board (Board,
 import Suguru.Utils (Matrix, Position, getAt, getNeighbors, validPosition, setAt)
 import Data.Maybe (mapMaybe, isNothing)
 
+-- ========================================================================== --
+--                                    Tipos                                   --
+-- ========================================================================== --
+
 type Options = [Int]
 
 type BoardOptions = Matrix Options
+
+-- ========================================================================== --
+--                                   Funções                                  --
+-- ========================================================================== --
 
 -- retorna as opções para uma determinada celula
 -- O predicado da função filter se trata da restrição entre vizinhos
@@ -49,9 +57,12 @@ getNextCell' board (Just x) (Just y) = do
 
 -- pretende-se implantar o backtracking na funcao abaixo
 solve :: Board -> Maybe Board
-solve board = do
-  if isSolved board then Just board
-  else getNextCell board >>= (\pos -> getCellOptions board pos >>= solve' board pos)
+solve board 
+  | isSolved board = Just board
+  | otherwise = do
+    pos <- getNextCell board
+    options <- getCellOptions board pos
+    solve' board pos options
 
 solve' :: Board -> Position -> Options -> Maybe Board
 solve' board pos [] = Nothing

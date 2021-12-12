@@ -3,6 +3,13 @@ module Suguru.Board where
 import Suguru.Utils (Matrix, Position, getNeighbors, setAt, getAt)
 import Data.Maybe (mapMaybe)
 
+-- ========================================================================== --
+--                                    Tipos                                   --
+-- ========================================================================== --
+
+-- Implementação do tabuleiro, como uma matriz de células
+type Board = Matrix Cell
+
 -- Uma célula, com o identificador do bloco e o seu valor
 -- "-1" significa valor desconhecido
 data Cell = Cell String (Maybe Int) deriving (Eq)
@@ -11,6 +18,10 @@ data Cell = Cell String (Maybe Int) deriving (Eq)
 instance Show Cell where
   show (Cell block Nothing) = show (block ++ "_")
   show (Cell block (Just value)) = show (block ++ show value)
+
+-- ========================================================================== --
+--                                   Funções                                  --
+-- ========================================================================== --
 
 -- Gera uma célula a partir de uma string
 parseCell :: String -> Cell
@@ -21,9 +32,6 @@ cellFromTuple :: (String, String) -> Cell
 cellFromTuple (block, value)
   | value /= "_" = Cell block (Just (read value :: Int))
   | otherwise = Cell block Nothing
-
--- Implementação do tabuleiro, como uma matriz de células
-type Board = Matrix Cell
 
 -- Gera o tabuleiro a partir de uma lista de strings
 -- String a string, para cada palavra separada por espaço cria-se uma célula.
@@ -48,7 +56,7 @@ getNeighborValues b p = mapMaybe getCellValue (getNeighbors b p)
 
 -- escreve no tabuleiro
 writeBoard :: Board -> Position -> Maybe Int -> Maybe Board
-writeBoard b p v = getBlockFromPos b p >>= (\block -> Just (setAt b p (Cell block v)))
+writeBoard b p v = getBlockFromPos b p >>= (\block -> setAt b p (Cell block v))
 
 -- retorna o valor de uma celula com base na sua posicao
 getValueFromPos :: Board -> Position -> Maybe Int

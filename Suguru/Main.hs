@@ -7,12 +7,20 @@ import Suguru.Utils (getNeighbors, printMatrix, setAt)
 import System.IO (readFile)
 
 main = do
-  content <- readFile "Examples/10x10.txt" 
+
+  print "Escolha o tamanho do tabuleiro, ha disponiveis tabuleiros de 6, 8 e 10 celulas:"
+  
+  t_size <- Prelude.getLine
+  let path = ("Examples/" ++ t_size ++ "x" ++ t_size ++".txt" )
+  let a = " foi o arquivo escolhido:"  
+  putStrLn (path ++ a)
+
+  content <- readFile path
   let rows = lines content
   let board = boardFromText rows
 
   printMatrix board
 
   case solve board of
-    Nothing -> print "Nothing"
+    Nothing -> print "Não foi encontrada uma solução para este tabuleiro"
     Just solution -> printMatrix solution

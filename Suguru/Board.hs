@@ -11,7 +11,7 @@ import Data.Maybe (mapMaybe)
 type Board = Matrix Cell
 
 -- | Uma célula, com o identificador do bloco e o seu valor
--- | "-1" significa valor desconhecido
+--  "-1" significa valor desconhecido
 data Cell = Cell String (Maybe Int) deriving (Eq)
 
 -- Implementa o tipo Show
@@ -34,7 +34,7 @@ cellFromTuple (block, value)
   | otherwise = Cell block Nothing
 
 -- | Gera o tabuleiro a partir de uma lista de strings
--- | String a string, para cada palavra separada por espaço cria-se uma célula.
+--  String a string, para cada palavra separada por espaço cria-se uma célula.
 boardFromText :: [String] -> Board
 boardFromText [] = error "Não foi possível ler o tabuleiro"
 boardFromText s = map (\x -> [parseCell c | c <- words x]) s

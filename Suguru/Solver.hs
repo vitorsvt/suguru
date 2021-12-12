@@ -23,9 +23,9 @@ type BoardOptions = Matrix Options
 --                                   Funções                                  --
 -- ========================================================================== --
 
--- retorna as opções para uma determinada celula
--- O predicado da função filter se trata da restrição entre vizinhos
--- A lista recebe os valores retornados pela função getBlockOptions
+-- | As opções validas para uma determinada celula ou Nothing.
+-- | O predicado da função filter se trata da restrição entre vizinhos
+-- | A lista recebe os valores retornados pela função getBlockOptions
 getCellOptions :: Board -> Position -> Maybe Options
 getCellOptions b p = do
   Cell block _ <- getAt b p
@@ -34,40 +34,65 @@ getCellOptions b p = do
     [] -> Nothing
     n -> Just n
 
+-- | As opções validas para um bloco 
 getBlockOptions :: Board -> String -> Maybe Options
 getBlockOptions board block =
-  getBlock board block >>= (\cells -> Just(filter (`notElem` mapMaybe getCellValue cells) [1..(length cells)]))
-
+  getBlock board block >>= (\c -> Just(filter 
+                                        (`notElem` mapMaybe getCellValue c) 
+                                        [1..(length c)]
+                                      ))
+        
+-- | Verifica se o tabuleiro foi resolvido
 isSolved :: Board -> Bool
 isSolved board = not (any (\(Cell _ value) -> isNothing value) (concat board))
 
+
+-- | A próxima célula, ou Nothing.
 getNextCell :: Board -> Maybe Position
 getNextCell board = do
-  case [Just (i, j) | i <- [1..(length board)], j <- [1..(length board)], isNothing (getValueFromPos board (i, j))] of
+  case next of
     [] -> Nothing
     n -> foldr1 (getNextCell' board) n
+    where
+      next = [Just (i, j) | 
+        i <- [1..(lb)], 
+        j <- [1..(lb)], 
+        isNothing (getValueFromPos board (i, j))]
+      lb = length board
 
+
+-- | Função auxiliar para escolha de próxima célula
+-- | Valida posições e em seguida retorna a posição com menos opções
 getNextCell' :: Board -> Maybe Position -> Maybe Position -> Maybe Position
 getNextCell' board Nothing _ = Nothing
 getNextCell' board _ Nothing = Nothing
-getNextCell' board (Just x) (Just y) = do
-  a <- getCellOptions board x
-  b <- getCellOptions board y
-  Just(if length a > length b then y else x)
+getNextCell' board (Just p) (Just q) = do
+  a <- getCellOptions board p
+  b <- getCellOptions board q
+  Just(if length a > length b then q else p)
 
--- pretende-se implantar o backtracking na funcao abaixo
+
+-- | Soluciona um tabuleiro.
+-- | Se recebe um tabuleiro valido, retorna a matriz. Senão:
+-- | Bloco do: pos recebe a proxima posicao a ser processada
+-- |           options recebe as opções dessa posição 
+-- |           solve' é chamada para realização do backtracking
 solve :: Board -> Maybe Board
 solve board
   | isSolved board = Just board
   | otherwise = do
-    pos <- getNextCell board
-    options <- getCellOptions board pos
-    solve' board pos options
+                pos <- getNextCell board
+                options <- getCellOptions board pos
+                solve' board pos options
 
+-- | Função auxiliar de solução que realiza o backtracking.
+-- | Bloco do, b recebe um quadro com uma nova entrada.
+-- | Se solve b retorna nothing, uma nova chamada é feita para solve'
+-- | sem a cabeça de lista, ou seja, ocorre o backtracking sem a opção invalida
 solve' :: Board -> Position -> Options -> Maybe Board
 solve' board pos [] = Nothing
 solve' board pos (value:options) = do
-  b <- writeBoard board pos (Just value)
-  case solve b of
-    Nothing -> solve' board pos options
-    b -> b
+                                   b <- writeBoard board pos (Just value)
+                                   case solve b of
+                                      Nothing -> solve' board pos options
+                                      b -> b

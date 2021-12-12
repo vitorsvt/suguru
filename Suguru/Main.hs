@@ -7,18 +7,9 @@ import Suguru.Utils (getNeighbors, printMatrix, setAt)
 import System.IO (readFile)
 
 main = do
-  content <- readFile "Examples/3.txt"
+  content <- readFile "Examples/10x10.txt" 
   let rows = lines content
   let board = boardFromText rows
-
-  -- print "Indexado a partir de 1"
-  -- print "Linha:"
-  -- is <- Prelude.getLine
-  -- print "Coluna:"
-  -- js <- Prelude.getLine
-
-  -- let i = (read is :: Int)
-  -- let j = (read js :: Int)
 
   printMatrix board
 
